@@ -1,0 +1,18 @@
+body {
+  margin-top: 40px; /* This margin just makes the text easier to read. You can remove it if you want since it can mess with your other styles. */
+}
+
+ul {
+  list-style: none;
+}
+
+header {
+  padding: 0.5rem;
+}
+.edit-btn {
+  float: right;
+  margin: 0 5px;
+}
+.del-btn {
+  float: right;
+}
