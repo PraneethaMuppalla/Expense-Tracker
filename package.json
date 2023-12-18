@@ -1,0 +1,11 @@
+{
+  "name": "expensetrackerapp",
+  "version": "1.0.0",
+  "description": "a website to track your expenses",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Praneetha Muppalla",
+  "license": "ISC"
+}
