@@ -21,38 +21,41 @@
     <div
       class="container middle-container d-flex flex-column justify-content-center"
     >
-      <div
-        class="row d-flex flex-column justify-content-center align-items-center"
-      >
-        <div class="col-12 mb-3 text-center"><h2>Create Account</h2></div>
+      <div class="row d-flex flex-column align-items-center">
+        <div class="col-12 mb-3 text-center">
+          <h2>Login to Your Account</h2>
+        </div>
         <div
           class="col-11 col-lg-5 col-md-8 p-md-4 p-3 bg-white custom-border mb-3"
         >
-          <form id="form">
+          <form id="loginForm">
             <div class="mb-3">
-              <label for="name" class="form-label fw-bold">Name</label>
-              <input type="text" class="form-control" id="name" required />
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label fw-bold">Email</label>
-              <input type="email" class="form-control" id="email" required />
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label fw-bold">Password</label>
+              <label for="loginEmail" class="form-label fw-bold">Email</label>
               <input
-                type="password"
+                type="email"
                 class="form-control"
-                id="password"
+                id="loginEmail"
                 required
               />
             </div>
-            <button type="submit" class="button mb-3" id="signUp">
-              Sign Up
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label fw-bold"
+                >Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="loginPassword"
+                required
+              />
+            </div>
+            <button type="submit" class="button mb-3" id="loginBtn">
+              Sign In
             </button>
           </form>
         </div>
         <div class="col-11 col-lg-5 col-md-8 p-md-4 p-3 bg-white custom-border">
-          <a href="./login.html">Existing User? Login</a>
+          <a href="./signup.html">New to Expense Tracker? Create an account</a>
         </div>
       </div>
     </div>
@@ -63,6 +66,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    <script src="../js/signup.js"></script>
+    <script src="../js/login.js"></script>
   </body>
 </html>
