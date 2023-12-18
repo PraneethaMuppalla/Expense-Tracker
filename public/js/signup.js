@@ -2,19 +2,7 @@ const axiosInstance = axios.create({
   baseUrl: "http://localhost:3000",
 });
 
-const signUpButton = document.getElementById("signUp");
-const signInButton = document.getElementById("signIn");
-const container = document.getElementById("container");
-
-signUpButton.addEventListener("click", () => {
-  container.classList.add("right-panel-active");
-});
-
-signInButton.addEventListener("click", () => {
-  container.classList.remove("right-panel-active");
-});
-
-const signUpFormEl = document.getElementById("signupFrom");
+const signUpFormEl = document.getElementById("form");
 const nameEl = document.getElementById("name");
 const emailEl = document.getElementById("email");
 const passwordEl = document.getElementById("password");
