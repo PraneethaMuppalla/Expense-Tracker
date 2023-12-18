@@ -1,5 +1,5 @@
 const axiosInstance = axios.create({
-  baseUrl: "http://localhost:3000",
+  baseURL: "http://localhost:3000",
 });
 
 const signUpFormEl = document.getElementById("form");
@@ -17,7 +17,11 @@ async function submitSignUpForm(e) {
     };
     const response = await axiosInstance.post("/sign-up", newUser);
   } catch (err) {
-    console.error(err);
+    if (err.response && err.response.status === 409) {
+      alert(err.response.data.error);
+    } else {
+      console.error(err);
+    }
   }
 }
 
