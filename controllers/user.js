@@ -1,6 +1,6 @@
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
-
+const jwt = require("jsonwebtoken");
 exports.postNewUser = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
@@ -26,6 +26,10 @@ exports.postNewUser = async (req, res, next) => {
   }
 };
 
+function generateAccessToken(id, email) {
+  return jwt.sign({ userId: id, email: email }, "secret key");
+}
+
 exports.loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -37,7 +41,11 @@ exports.loginUser = async (req, res, next) => {
     } else {
       const passwordsMatch = await bcrypt.compare(password, user.password);
       if (passwordsMatch) {
-        res.status(200).json({ success: true, msg: "Successful Login" });
+        res.status(200).json({
+          success: true,
+          msg: "Successful Login",
+          token: generateAccessToken(user.id, user.email),
+        });
       } else {
         //unauthorized
         res.status(401).json({ success: false, msg: "Password doesn't match" });
