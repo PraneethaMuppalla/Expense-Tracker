@@ -11,9 +11,10 @@ async function submitLoginForm(e) {
     e.preventDefault();
     const loginUser = {
       email: loginEmailEl.value,
-      passwordEl: loginPasswordEl.value,
+      password: loginPasswordEl.value,
     };
     const response = await axiosInstance.post("/login", loginUser);
+    window.location.href = "./home.html";
     loginEmailEl.value = "";
     loginPasswordEl.value = "";
   } catch (err) {
@@ -31,6 +32,7 @@ loginFormEl.addEventListener("submit", submitLoginForm);
 
 // <<--------------------- code to get toast messages ------------------------>>>>
 const urlParams = new URLSearchParams(window.location.search);
+console.log("urlParams" + urlParams);
 const successParam = urlParams.get("success");
 const errorParam = urlParams.get("error");
 if (successParam && successParam === "1") {

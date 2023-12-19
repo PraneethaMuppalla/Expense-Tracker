@@ -9,7 +9,6 @@ body {
   height: 100vh;
   padding: 0;
   margin: 0;
-  color: #a17ebe;
 }
 
 .top-nav-bar {
@@ -20,20 +19,11 @@ body {
   padding-left: 5%;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
 }
-
-.top-nav-bar h3 {
+.top-nav-bar a {
   font-family: cursive;
   font-size: 20px;
   font-weight: 600;
   color: white;
-}
-
-.custom-border {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 14px 0px;
-  border-radius: 5px;
-}
-.middle-container {
-  height: 75vh;
 }
 .button {
   background-color: #a17ebe;
@@ -43,3 +33,25 @@ body {
   border-radius: 5px;
   font-weight: bold;
 }
+
+.custom-border {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 4px 2px;
+  border-radius: 5px;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Set the table layout to fixed */
+  border-radius: 30px;
+  min-width: 600px;
+}
+
+/* .custom-table th,
+.custom-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} */

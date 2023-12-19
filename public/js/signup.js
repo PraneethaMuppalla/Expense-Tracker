@@ -36,6 +36,7 @@ signUpFormEl.addEventListener("submit", submitSignUpForm);
 
 // <<--------------------- code to get toast messages ------------------------>>>>
 const urlParams = new URLSearchParams(window.location.search);
+console.log("urlParams" + urlParams);
 const successParam = urlParams.get("success");
 const errorParam = urlParams.get("error");
 if (errorParam && errorParam === "1") {
