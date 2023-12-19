@@ -19,17 +19,27 @@ async function submitSignUpForm(e) {
     nameEl.value = "";
     emailEl.value = "";
     passwordEl.value = "";
-    successToast("Registration Successful. Please Login.");
+    window.location.href = `./login.html?success=1`;
   } catch (err) {
     if (err.response && err.response.status === 409) {
-      errorToast("User already exists. Please Login.");
+      window.location.href = `./login.html?error=1`;
       nameEl.value = "";
       emailEl.value = "";
       passwordEl.value = "";
     } else {
-      console.error(err);
+      errorToast("Some error occured. Please try again.");
     }
   }
 }
 
 signUpFormEl.addEventListener("submit", submitSignUpForm);
+
+// <<--------------------- code to get toast messages ------------------------>>>>
+const urlParams = new URLSearchParams(window.location.search);
+const successParam = urlParams.get("success");
+const errorParam = urlParams.get("error");
+if (errorParam && errorParam === "1") {
+  errorToast("You are not registered. Please Sign up with us.");
+  const newUrl = window.location.href.split("?")[0];
+  history.replaceState(null, "", newUrl);
+}

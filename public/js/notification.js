@@ -3,7 +3,7 @@ function successToast(message, duration) {
     text: message,
     duration: duration,
     offset: {
-      y: 100,
+      y: 50,
     },
     newWindow: true,
     close: true,
@@ -24,7 +24,7 @@ function errorToast(message) {
     gravity: "top",
     position: "right",
     offset: {
-      y: 100,
+      y: 50,
     },
     stopOnFocus: true,
     style: {
