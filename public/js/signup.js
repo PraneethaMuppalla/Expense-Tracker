@@ -13,12 +13,19 @@ async function submitSignUpForm(e) {
     const newUser = {
       name: nameEl.value,
       email: emailEl.value,
-      passwordEl: passwordEl.value,
+      password: passwordEl.value,
     };
     const response = await axiosInstance.post("/sign-up", newUser);
+    nameEl.value = "";
+    emailEl.value = "";
+    passwordEl.value = "";
+    successToast("Registration Successful. Please Login.");
   } catch (err) {
     if (err.response && err.response.status === 409) {
-      alert(err.response.data.error);
+      errorToast("User already exists. Please Login.");
+      nameEl.value = "";
+      emailEl.value = "";
+      passwordEl.value = "";
     } else {
       console.error(err);
     }
