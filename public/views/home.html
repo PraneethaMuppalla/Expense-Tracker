@@ -51,25 +51,25 @@
     <!-- form -->
     <div class="container">
       <form
-        class="row d-flex flex-lg-row flex-md-column align-items-center justify-content-center custom-border p-lg-3 p-md-4 p-3 m-md-5 m-4"
+        class="row d-flex flex-lg-row flex-md-column align-items-center justify-content-center custom-border p-lg-3 p-md-4 p-3 p-xs-2 m-md-5 m-4"
         id="form"
       >
-        <div class="mb-3 col-10 col-lg-3">
+        <div class="mb-3 mb-sm-2 col-xs-12 col-md-10 col-lg-3">
           <label for="category" class="form-label fw-bold fw-md-semibold"
             >Category</label
           >
-          <select class="form-select" id="category">
-            <option selected="">Movie</option>
-            <option value="1">Grocery</option>
-            <option value="2">Petrol</option>
-            <option value="3">Diesel</option>
+          <select class="form-select" id="category" required>
+            <option value="Movie">Movie</option>
+            <option value="Grocery">Grocery</option>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
           </select>
         </div>
-        <div class="mb-3 col-10 col-lg-3">
+        <div class="mb-3 mb-sm-2 col-xs-12 col-md-10 col-lg-3">
           <label for="amount" class="form-label fw-bold">Amount</label>
           <input type="number" class="form-control" id="amount" required />
         </div>
-        <div class="mb-3 col-10 col-lg-4">
+        <div class="mb-3 mb-sm-2 col-xs-12 col-md-10 col-lg-4">
           <label for="description" class="form-label fw-bold"
             >Description</label
           >
@@ -86,15 +86,14 @@
       <div
         class="row d-flex m-md-5 m-4 p-lg-3 p-md-4 p-3 custom-border overflow-x-auto mt-0"
       >
-        <table
-          class="table table-striped table-hover mt-3 table-container custom-table"
-        >
+        <table class="styled-table">
           <thead>
             <tr>
-              <th scope="col">Amount</th>
-              <th scope="col">Description</th>
-              <th scope="col">Category</th>
-              <th scope="col">Date</th>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>

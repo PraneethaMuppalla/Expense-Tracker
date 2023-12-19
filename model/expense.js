@@ -16,7 +16,7 @@ const Expense = sequelise.define("expenses", {
     allowNull: false,
   },
   description: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
   },
   date: {

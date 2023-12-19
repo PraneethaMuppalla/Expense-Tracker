@@ -20,7 +20,7 @@ exports.addNewExpense = async (req, res, next) => {
     });
     res.status(201).json(response);
   } catch (err) {
-    res.json({ success: false, msg: err });
+    res.status(500).json({ success: false, msg: err });
   }
 };
 exports.deleteExpense = async (req, res, next) => {
@@ -33,6 +33,6 @@ exports.deleteExpense = async (req, res, next) => {
     });
     res.json({ success: true, msg: response });
   } catch (err) {
-    res.json({ success: false, msg: err });
+    res.status(400).json({ success: false, msg: err });
   }
 };

@@ -26,19 +26,22 @@ function renderEachExpense(each) {
   let tr = document.createElement("tr");
   tr.id = `rowEl${each.id}`;
   let td1 = document.createElement("td");
-  td1.appendChild(document.createTextNode(each.expenses));
+  td1.textContent = each.date;
 
   let td2 = document.createElement("td");
-  td2.appendChild(document.createTextNode(each.description));
+  td2.textContent = each.category;
 
   let td3 = document.createElement("td");
-  td3.appendChild(document.createTextNode(each.category));
+  td3.textContent = each.expenses;
 
   let td4 = document.createElement("td");
+  td4.textContent = each.description;
 
+  let td5 = document.createElement("td");
   let deleteBtn = document.createElement("button");
-  deleteBtn.className = "editDelete btn btn-danger delete";
-  deleteBtn.appendChild(document.createTextNode("Delete"));
+  deleteBtn.className = "btn-sm btn btn-danger m-0";
+  deleteBtn.textContent = "Delete";
+
   deleteBtn.onclick = function () {
     deleteExpense(each.id);
   };
@@ -47,13 +50,14 @@ function renderEachExpense(each) {
   // editBtn.className = "editDelete btn btn-success edit";
   // editBtn.appendChild(document.createTextNode("Edit"));
 
-  td4.appendChild(deleteBtn);
+  td5.appendChild(deleteBtn);
   //td4.appendChild(editBtn);
 
   tr.appendChild(td1);
   tr.appendChild(td2);
   tr.appendChild(td3);
   tr.appendChild(td4);
+  tr.appendChild(td5);
   tbodyEl.appendChild(tr);
 }
 
@@ -101,7 +105,7 @@ async function getAllExpenses() {
     });
   } catch (err) {
     console.error(err);
-    errorToast("Some error occured. Please try again.");
+    errorToast("Some error occured.We can't fetch expenses. Please try again.");
   }
 }
 
