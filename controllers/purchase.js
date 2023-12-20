@@ -1,14 +1,15 @@
 const Razorpay = require("razorpay");
 const Order = require("../model/order");
+const User = require("../model/user");
 const userController = require("./user");
 
 exports.purchasePremium = async (req, res) => {
   try {
-    var rzp = new Razorpay({
-      key_id: "rzp_test_zHfXihuxPufChA",
-      key_secret: "HsVCPeJ2Wsffmg5fJ1sczVa4",
+    const rzp = new Razorpay({
+      key_id: process.env.KEY_ID,
+      key_secret: process.env.KEY_SECRET,
     });
-    const amount = 25000;
+    const amount = 5050;
     rzp.orders.create({ amount, currency: "INR" }, (err, order) => {
       if (err) {
         throw new Error(JSON.stringify(err));
@@ -23,35 +24,48 @@ exports.purchasePremium = async (req, res) => {
         });
     });
   } catch (err) {
-    console.log(err);
-    res.status(403).json({ message: "Something went wrong", error: err });
+    console.error(err);
+    res.status(403).json({
+      success: false,
+      msg: "Something went wrong",
+      error: err,
+    });
   }
 };
 
-exports.updateTransactionStatus = async (req, res) => {
+exports.updateTransactionStatus = async (req, res, next) => {
+  let order;
   try {
-    const userId = req.user.id;
     const { payment_id, order_id } = req.body;
-    const order = await Order.findOne({ where: { orderid: order_id } });
+    const userId = req.user.id;
+    const order = await Order.findOne({
+      where: {
+        userId: userId,
+        orderid: order_id,
+      },
+    });
     const promise1 = order.update({
       paymentid: payment_id,
       status: "SUCCESSFUL",
     });
     const promise2 = req.user.update({ isPremiumUser: true });
-
-    Promise.all([promise1, promise2])
-      .then(() => {
-        return res.status(202).json({
-          sucess: true,
-          message: "Transaction Successful",
-          token: userController.generateAccessToken,
-        });
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+    const successOrder = await Promise.all([promise1, promise2]);
+    return res.status(202).json({
+      success: true,
+      message: "Transaction Successful",
+    });
   } catch (err) {
-    console.log(err);
-    res.status(403).json({ error: err, message: "Sometghing went wrong" });
+    console.error(err);
+    const promise3 = req.user.update({ isPremiumUser: false });
+    const promise4 = order.update({
+      status: "FAIL",
+    });
+    try {
+      await Promise.all([promise3, promise4]);
+    } catch (error) {
+      console.error("Error updating user and order in catch block:", error);
+    }
+
+    res.status(500).json({ error: err.message, success: false });
   }
 };

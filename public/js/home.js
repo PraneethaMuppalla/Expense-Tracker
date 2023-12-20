@@ -1,7 +1,7 @@
 const token = localStorage.getItem("token");
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000",
-  timeout: 1000,
+  timeout: 3000,
   headers: { Authorization: token },
 });
 
@@ -11,6 +11,7 @@ const categoryEl = document.getElementById("category");
 const descriptionEl = document.getElementById("description");
 const tbodyEl = document.getElementById("tbody");
 const buyPremiumBtn = document.getElementById("buyPremium");
+const leaderBoardLink = document.getElementById("leaderBoard");
 
 async function deleteExpense(id) {
   try {
@@ -114,35 +115,65 @@ async function getAllExpenses() {
 }
 
 async function purchasePremium(e) {
-  const token = localStorage.getItem("token");
-  const res = await axios.get(
-    "http://localhost:3000/purchase/premiumMembership",
-    { headers: { Authorization: token } }
-  );
-  var options = {
-    key: res.data.key_id, // Enter the Key ID generated from the Dashboard
-    order_id: res.data.order.id, // For one time payment
-    // This handler function will handle the success payment
-    handler: async function (response) {
-      const res = await axios.post(
-        "http://localhost:3000/purchase/updateTransactionStatus",
-        {
-          order_id: options.order_id,
-          payment_id: response.razorpay_payment_id,
-        },
-        { headers: { Authorization: token } }
-      );
+  try {
+    const response = await axiosInstance.get("/purchase/premiumMembership");
+    const options = {
+      key: response.data.key_id,
+      order_id: response.data.order.id,
+      handler: async function (response) {
+        const res = await axiosInstance.post(
+          "/purchase/updateTransactionStatus",
+          {
+            order_id: options.order_id,
+            payment_id: response.razorpay_payment_id,
+          }
+        );
+        console.log(res);
+        successToast("Welcome to our Premium Membership", 2000);
 
-      console.log(res);
-      alert("Welcome to our Premium Membership");
-      localStorage.setItem("token", res.data.token);
-    },
-  };
-  const rzp1 = new Razorpay(options);
-  rzp1.open();
-  e.preventDefault();
+        isPremiumUser();
+      },
+    };
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+    e.preventDefault();
+  } catch (err) {
+    console.error(err);
+    errorToast("Some error occured");
+  }
+}
+
+async function isPremiumUser() {
+  try {
+    const res = await axiosInstance.get("/isPremiumUser");
+    if (res.data.isPremiumUser) {
+      buyPremiumBtn.innerHTML = "Premium Member &#128081";
+      buyPremiumBtn.removeEventListener("click", purchasePremium);
+      leaderBoardLink.removeAttribute("click");
+      leaderBoardLink.href = "./leaderBoard.html";
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 buyPremiumBtn.addEventListener("click", purchasePremium);
 formEl.addEventListener("submit", addExpense);
 window.addEventListener("DOMContentLoaded", getAllExpenses);
+window.addEventListener("DOMContentLoaded", isPremiumUser);
+
+// <<--------------------- code to get toast messages ------------------------>>>>
+const urlParams = new URLSearchParams(window.location.search);
+console.log("urlParams" + urlParams);
+const successParam = urlParams.get("success");
+const errorParam = urlParams.get("error");
+if (successParam && successParam === "1") {
+  successToast("Login Successful.", 2000);
+  const newUrl = window.location.href.split("?")[0];
+  history.replaceState(null, "", newUrl);
+}
+if (errorParam && errorParam === "1") {
+  errorToast("You are already registered. Please log in.");
+  const newUrl = window.location.href.split("?")[0];
+  history.replaceState(null, "", newUrl);
+}

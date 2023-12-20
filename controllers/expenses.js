@@ -41,6 +41,6 @@ exports.deleteExpense = async (req, res, next) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(400).json({ success: false, msg: err });
+    res.status(500).json({ success: false, msg: err });
   }
 };

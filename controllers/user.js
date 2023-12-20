@@ -1,6 +1,8 @@
-const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const User = require("../model/user");
+
 exports.postNewUser = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
@@ -26,8 +28,18 @@ exports.postNewUser = async (req, res, next) => {
   }
 };
 
-exports.generateAccessToken = function (id, email) {
-  return jwt.sign({ userId: id, email: email }, "secret key");
+exports.generateToken = function (userId, userEmail) {
+  token = jwt.sign({ id: userId, email: userEmail }, process.env.SECRET_KEY);
+  return token;
+};
+
+exports.isPremiumUser = (req, res, next) => {
+  try {
+    const isPremiumUser = req.user.isPremiumUser;
+    res.json({ isPremiumUser });
+  } catch (err) {
+    res.status(500).json({ success: false, err: err });
+  }
 };
 
 exports.loginUser = async (req, res, next) => {
@@ -40,11 +52,12 @@ exports.loginUser = async (req, res, next) => {
       res.status(404).json({ msg: "User not found" });
     } else {
       const passwordsMatch = await bcrypt.compare(password, user.password);
+      const token = this.generateToken(user.id, user.email);
       if (passwordsMatch) {
         res.status(200).json({
           success: true,
           msg: "Successful Login",
-          token: generateAccessToken(user.id, user.email),
+          token,
         });
       } else {
         //unauthorized

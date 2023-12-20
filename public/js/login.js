@@ -14,8 +14,10 @@ async function submitLoginForm(e) {
       password: loginPasswordEl.value,
     };
     const response = await axiosInstance.post("/login", loginUser);
+    loginEmailEl.value = "";
+    loginPasswordEl.value = "";
     localStorage.setItem("token", response.data.token);
-    window.location.href = "./home.html";
+    window.location.href = "./home.html?success=1";
   } catch (err) {
     if (err.response && err.response.status === 404) {
       window.location.href = "./signup.html?error=1";
