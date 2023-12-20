@@ -10,6 +10,7 @@ const amountEl = document.getElementById("amount");
 const categoryEl = document.getElementById("category");
 const descriptionEl = document.getElementById("description");
 const tbodyEl = document.getElementById("tbody");
+const buyPremiumBtn = document.getElementById("buyPremium");
 
 async function deleteExpense(id) {
   try {
@@ -112,5 +113,36 @@ async function getAllExpenses() {
   }
 }
 
+async function purchasePremium(e) {
+  const token = localStorage.getItem("token");
+  const res = await axios.get(
+    "http://localhost:3000/purchase/premiumMembership",
+    { headers: { Authorization: token } }
+  );
+  var options = {
+    key: res.data.key_id, // Enter the Key ID generated from the Dashboard
+    order_id: res.data.order.id, // For one time payment
+    // This handler function will handle the success payment
+    handler: async function (response) {
+      const res = await axios.post(
+        "http://localhost:3000/purchase/updateTransactionStatus",
+        {
+          order_id: options.order_id,
+          payment_id: response.razorpay_payment_id,
+        },
+        { headers: { Authorization: token } }
+      );
+
+      console.log(res);
+      alert("Welcome to our Premium Membership");
+      localStorage.setItem("token", res.data.token);
+    },
+  };
+  const rzp1 = new Razorpay(options);
+  rzp1.open();
+  e.preventDefault();
+}
+
+buyPremiumBtn.addEventListener("click", purchasePremium);
 formEl.addEventListener("submit", addExpense);
 window.addEventListener("DOMContentLoaded", getAllExpenses);

@@ -26,9 +26,9 @@ exports.postNewUser = async (req, res, next) => {
   }
 };
 
-function generateAccessToken(id, email) {
+exports.generateAccessToken = function (id, email) {
   return jwt.sign({ userId: id, email: email }, "secret key");
-}
+};
 
 exports.loginUser = async (req, res, next) => {
   try {
