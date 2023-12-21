@@ -14,9 +14,14 @@ async function submitForm(e) {
       "/password/forgotpassword",
       email
     );
+    emailEl.value = "";
+    successToast("A link to reset password is sent to your mail");
   } catch (err) {
-    console.error(err);
-    errorToast("Some error occured. Please try again.");
+    if (err.response && err.response.status === 404) {
+      errorToast("Email you entered is incorrect. Please try again.");
+    } else {
+      errorToast("Some error occured. Please try again.");
+    }
   }
 }
 

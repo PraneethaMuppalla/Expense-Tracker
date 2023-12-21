@@ -1,0 +1,34 @@
+<form action="/password/updatePassword" id="form" method="POST">
+  <input type="hidden" value="${uuid}" name="uuid" id="uuid" />
+  <label>Enter Password</label>
+  <br />
+  <br />
+  <input type="password" name="password" id="password" />
+  <br />
+  <br />
+  <button type="submit">Ok</button>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script>
+  const axiosInstance = axios.create({
+    baseURL: "http://localhost:3000",
+  });
+  const formEl = document.getElementById("form");
+  const passwordEl = document.getElementById("password");
+  formEl.addEventListener("submit", async () => {
+    try {
+      let newReq = {
+        uuid:${uuid},
+        password: passwordEl.value,
+      };
+      await axiosInstance.post("/password/updatePassword", newReq);
+      alert("Password set. Go to home page");
+    } catch (err) {
+      if (err.response && err.response.status === 409) {
+        alert("Link expired. Please try again");
+      } else {
+        errorToast("Some error occured. Please try again.");
+      }
+    }
+  });
+</script>

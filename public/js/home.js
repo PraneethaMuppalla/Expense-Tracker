@@ -147,7 +147,7 @@ async function isPremiumUser() {
   try {
     const res = await axiosInstance.get("/isPremiumUser");
     if (res.data.isPremiumUser) {
-      buyPremiumBtn.innerHTML = "Premium Member &#128081";
+      buyPremiumBtn.innerHTML = "Premium Member ";
       buyPremiumBtn.removeEventListener("click", purchasePremium);
       leaderBoardLink.removeAttribute("click");
       leaderBoardLink.href = "./leaderBoard.html";
