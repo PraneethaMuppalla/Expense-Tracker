@@ -27,7 +27,7 @@ app.use("/premium", premiumRoutes);
 User.hasMany(Expenses, { constraints: true, onDelete: "CASCADE" });
 Expenses.belongsTo(User);
 
-User.hasMany(Order);
+User.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
 Order.belongsTo(User);
 
 sequelise

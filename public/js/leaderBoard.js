@@ -10,13 +10,13 @@ function renderEachExpense(each, i) {
   let tr = document.createElement("tr");
   tr.id = `rowEl${each.id}`;
   let td1 = document.createElement("td");
-  td1.textContent = i;
+  td1.textContent = i + 1;
 
   let td2 = document.createElement("td");
   td2.textContent = each.totalExpenses;
 
   let td3 = document.createElement("td");
-  td3.textContent = each.user.name;
+  td3.textContent = each.name;
 
   tr.appendChild(td1);
   tr.appendChild(td2);

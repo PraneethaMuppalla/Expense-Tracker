@@ -5,19 +5,23 @@ const User = require("../model/user");
 
 exports.getLeaderBoard = async (req, res, next) => {
   try {
-    const response = await Expense.findAll({
-      attributes: [
-        [Sequelize.fn("SUM", Sequelize.col("expenses")), "totalExpenses"],
-        "userId",
-      ],
-      include: [
-        {
-          model: User,
-          attributes: ["name"],
-        },
-      ],
-      group: ["userId"],
-      order: [[Sequelize.literal("totalExpenses"), "DESC"]],
+    //solution using joins groupby sort
+    // const response = await Expense.findAll({
+    //   attributes: [
+    //     [Sequelize.fn("SUM", Sequelize.col("expenses")), "totalExpenses"],
+    //     "userId",
+    //   ],
+    //   include: [
+    //     {
+    //       model: User,
+    //       attributes: ["name"],
+    //     },
+    //   ],
+    //   group: [`userId`],
+    //   order: [[Sequelize.col("totalExpenses"), "DESC"]],
+    // });
+    const response = await User.findAll({
+      order: [["totalExpenses", "DESC"]],
     });
     console.log(response);
     res.json(response);
