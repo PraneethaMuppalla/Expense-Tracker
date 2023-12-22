@@ -1,6 +1,7 @@
 const Expenses = require("../model/expense");
 const Sequelize = require("sequelize");
 const { Op } = require("sequelize");
+const AWS = require("aws-sdk");
 
 exports.getTimelyExpense = async (userId, type) => {
   let response;
@@ -40,4 +41,28 @@ exports.getTimelyExpense = async (userId, type) => {
       response = await Expenses.findAll({ where: { userId } });
   }
   return response;
+};
+
+exports.uploadToS3 = (stringifiedResponse, fileName) => {
+  let s3Bucket = new AWS.S3({
+    accessKeyId: process.env.IAM_USER_KEY,
+    secretAccessKey: process.env.IAM_USER_SECRET,
+  });
+  let params = {
+    Bucket: process.env.BUCKET_NAME,
+    Key: fileName,
+    Body: stringifiedResponse,
+    ACL: "public-read",
+  };
+  return new Promise((res, rej) => {
+    s3Bucket.upload(params, (err, response) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        console.log(response);
+        res(response.Location);
+      }
+    });
+  });
 };

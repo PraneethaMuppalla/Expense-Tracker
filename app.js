@@ -16,6 +16,7 @@ const User = require("./model/user");
 const Expenses = require("./model/expense");
 const Order = require("./model/order");
 const ForgotPw = require("./model/forgotPw");
+const FilesDownloaded = require("./model/downloadedFiles");
 
 // express instance
 const app = express();
@@ -39,6 +40,9 @@ Order.belongsTo(User);
 
 User.hasMany(ForgotPw, { constraints: true, onDelete: "CASCADE" });
 ForgotPw.belongsTo(User);
+
+User.hasMany(FilesDownloaded);
+FilesDownloaded.belongsTo(User);
 
 sequelise
   .sync()

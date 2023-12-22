@@ -53,5 +53,18 @@ async function getTimelyExpenses() {
   }
 }
 
+async function downloadReport() {
+  try {
+    const response = await axiosInstance.get(`/reportFromS3`);
+    const aEl = document.createElement("a");
+    aEl.href = response.data.fileUrl;
+    aEl.click();
+    aEl.download = "expensereport.csv";
+  } catch (err) {
+    console.error(err);
+    alert("Some error occured");
+  }
+}
+
 expnsesEl.addEventListener("change", getTimelyExpenses);
 document.addEventListener("DOMContentLoaded", getTimelyExpenses);
