@@ -12,6 +12,7 @@ const descriptionEl = document.getElementById("description");
 const tbodyEl = document.getElementById("tbody");
 const buyPremiumBtn = document.getElementById("buyPremium");
 const leaderBoardLink = document.getElementById("leaderBoard");
+const reportLink = document.getElementById("reports");
 
 async function deleteExpense(id) {
   try {
@@ -151,6 +152,8 @@ async function isPremiumUser() {
       buyPremiumBtn.removeEventListener("click", purchasePremium);
       leaderBoardLink.removeAttribute("click");
       leaderBoardLink.href = "./leaderBoard.html";
+      reportLink.removeAttribute("click");
+      reportLink.href = "./report.html";
     }
   } catch (err) {
     console.error(err);
