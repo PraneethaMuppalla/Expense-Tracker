@@ -41,7 +41,7 @@ body {
 
 .styled-table {
   border-collapse: collapse;
-  margin: 25px 0;
+  margin: 12px 0;
   font-size: 0.9em;
   font-family: sans-serif;
   min-width: 600px;
@@ -52,14 +52,22 @@ body {
   color: #ffffff;
   text-align: left;
 }
-.styled-table th,
-.styled-table td {
-  padding: 12px;
+.styled-table th {
+  padding: 9px;
   max-width: 125px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.styled-table td {
+  padding: 6px;
+  max-width: 125px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .styled-table tbody tr {
   border-bottom: 1px solid #dddddd;
 }

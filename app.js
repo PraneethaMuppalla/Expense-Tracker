@@ -6,10 +6,11 @@ const dotenv = require("dotenv");
 
 const sequelise = require("./util/database");
 const userRoutes = require("./routes/user");
-const expenseRouter = require("./routes/expense");
-const purchaseRouter = require("./routes/purchase");
+const expenseRoutes = require("./routes/expense");
+const purchaseRoutes = require("./routes/purchase");
 const premiumRoutes = require("./routes/premium");
 const forgotPwRoutes = require("./routes/forgotPw");
+const reportsRoutes = require("./routes/reports");
 
 const User = require("./model/user");
 const Expenses = require("./model/expense");
@@ -24,10 +25,11 @@ app.use(cors());
 dotenv.config();
 // middle ware
 app.use(userRoutes);
-app.use("/expenses", expenseRouter);
-app.use("/purchase", purchaseRouter);
+app.use("/expenses", expenseRoutes);
+app.use("/purchase", purchaseRoutes);
 app.use("/premium", premiumRoutes);
 app.use("/password", forgotPwRoutes);
+app.use(reportsRoutes);
 
 User.hasMany(Expenses, { constraints: true, onDelete: "CASCADE" });
 Expenses.belongsTo(User);

@@ -67,28 +67,14 @@ function renderEachExpense(each) {
   tbodyEl.appendChild(tr);
 }
 
-function getCurrentDate() {
-  const currentDate = new Date();
-  const day = currentDate.getDate();
-  const month = currentDate.getMonth() + 1;
-  const year = currentDate.getFullYear();
-  // add leading zeros to day and month if needed
-  const formattedDay = day < 10 ? `0${day}` : day;
-  const formattedMonth = month < 10 ? `0${month}` : month;
-  // create the date string in date-month-year format
-  const dateStr = `${formattedDay}-${formattedMonth}-${year}`;
-  return dateStr;
-}
-
 async function addExpense(e) {
   try {
     e.preventDefault();
-    const date = getCurrentDate();
+
     const newExpense = {
       expenses: amountEl.value,
       category: categoryEl.value,
       description: descriptionEl.value,
-      date,
     };
     const response = await axiosInstance.post(
       "/expenses/add-expense",

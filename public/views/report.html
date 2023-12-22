@@ -79,10 +79,18 @@
       </div>
     </nav>
     <!-- form -->
+
     <div class="container">
       <div
-        class="row d-flex m-md-5 m-4 p-lg-3 p-md-4 p-3 custom-border overflow-x-auto mt-0"
+        class="row d-flex m-md-5 m-4 p-lg-3 p-md-4 p-3 custom-border overflow-x-auto mt-0 flex-column"
       >
+        <div class="col-lg-3 col-5">
+          <select class="form-select" id="expenses">
+            <option value="today">Daily Expenses</option>
+            <option value="month">Monthly Expenses</option>
+            <option value="year">Yearly Expenses</option>
+          </select>
+        </div>
         <table class="styled-table">
           <thead>
             <tr>
@@ -90,12 +98,17 @@
               <th>Amount</th>
               <th>Category</th>
               <th>Description</th>
-              <th>Expenses</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
         </table>
-        <button id="downloadBtn">Downolad</button>
+      </div>
+      <div class="row m-md-5 m-4 align-items-end">
+        <div class="col-12 d-flex justify-content-end">
+          <button class="btn btn-secondary" id="downloadBtn">
+            Downolad Report
+          </button>
+        </div>
       </div>
     </div>
 
