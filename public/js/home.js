@@ -14,7 +14,8 @@ const buyPremiumBtn = document.getElementById("buyPremium");
 const leaderBoardLink = document.getElementById("leaderBoard");
 const reportLink = document.getElementById("reports");
 const paginationCont = document.getElementById("pagination");
-
+const rowsEl = document.getElementById("rows");
+let numOfRows = rowsEl.value;
 async function deleteExpense(id) {
   try {
     const response = await axiosInstance.delete(
@@ -106,29 +107,33 @@ function showPagination({
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "<";
     prevBtn.classList.add("btn", "btn-secondary", "me-2");
-    prevBtn.addEventListener("click", () => getExpenses(previousPage));
+    prevBtn.addEventListener("click", () =>
+      getExpenses(previousPage, numOfRows)
+    );
     paginationCont.appendChild(prevBtn);
   }
   const currentBtn = document.createElement("button");
   currentBtn.textContent = currentPage + 1 + " of " + lastPage;
   currentBtn.classList.add("btn", "btn-secondary", "me-2");
-  currentBtn.addEventListener("click", () => getExpenses(currentPage));
+  currentBtn.addEventListener("click", () =>
+    getExpenses(currentPage, numOfRows)
+  );
   paginationCont.appendChild(currentBtn);
 
   if (hasNextPage) {
     const nextBtn = document.createElement("button");
     nextBtn.textContent = ">";
     nextBtn.classList.add("btn", "btn-secondary", "me-2");
-    nextBtn.addEventListener("click", () => getExpenses(nextPage));
+    nextBtn.addEventListener("click", () => getExpenses(nextPage, numOfRows));
     paginationCont.appendChild(nextBtn);
   }
 }
 
-async function getExpenses(page) {
+async function getExpenses(page, rows) {
   try {
     tbodyEl.innerHTML = "";
     const result = await axiosInstance.get(
-      `/expenses/get-expenses?page=${page}`
+      `/expenses/get-expenses?page=${page}&rows=${rows}`
     );
     const { expenses, ...pagesDes } = result.data;
     expenses.forEach((expense) => {
@@ -188,7 +193,11 @@ async function isPremiumUser() {
 
 buyPremiumBtn.addEventListener("click", purchasePremium);
 formEl.addEventListener("submit", addExpense);
-window.addEventListener("DOMContentLoaded", () => getExpenses(0));
+rowsEl.addEventListener("change", () => {
+  numOfRows = rowsEl.value;
+  getExpenses(0, numOfRows);
+});
+window.addEventListener("DOMContentLoaded", () => getExpenses(0, numOfRows));
 window.addEventListener("DOMContentLoaded", isPremiumUser);
 
 // <<--------------------- code to get toast messages ------------------------>>>>
