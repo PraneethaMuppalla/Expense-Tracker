@@ -13,6 +13,7 @@ const tbodyEl = document.getElementById("tbody");
 const buyPremiumBtn = document.getElementById("buyPremium");
 const leaderBoardLink = document.getElementById("leaderBoard");
 const reportLink = document.getElementById("reports");
+const paginationCont = document.getElementById("pagination");
 
 async function deleteExpense(id) {
   try {
@@ -32,7 +33,10 @@ function renderEachExpense(each) {
   let tr = document.createElement("tr");
   tr.id = `rowEl${each.id}`;
   let td1 = document.createElement("td");
-  td1.textContent = each.date;
+  const dateFromBe = new Date(each.date);
+  td1.textContent = `${dateFromBe.getFullYear()}-${
+    dateFromBe.getMonth() + 1
+  }-${dateFromBe.getDate()}`;
 
   let td2 = document.createElement("td");
   td2.textContent = each.category;
@@ -89,9 +93,11 @@ async function addExpense(e) {
   }
 }
 
-async function getAllExpenses() {
+async function getExpenses(e, page = 1) {
   try {
-    const result = await axiosInstance.get("/expenses/get-all-expenses");
+    const result = await axiosInstance.get(
+      `/expenses/get-expenses?page=${page}`
+    );
     result.data.forEach((each) => {
       renderEachExpense(each);
     });
@@ -148,7 +154,7 @@ async function isPremiumUser() {
 
 buyPremiumBtn.addEventListener("click", purchasePremium);
 formEl.addEventListener("submit", addExpense);
-window.addEventListener("DOMContentLoaded", getAllExpenses);
+window.addEventListener("DOMContentLoaded", getExpenses);
 window.addEventListener("DOMContentLoaded", isPremiumUser);
 
 // <<--------------------- code to get toast messages ------------------------>>>>

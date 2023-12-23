@@ -4,7 +4,7 @@ const expensesController = require("../controllers/expenses");
 const authUser = require("../middleware/auth");
 const router = express.Router();
 
-router.get("/get-all-expenses", authUser, expensesController.getAllExpenses);
+router.get("/get-expenses", authUser, expensesController.getExpenses);
 router.post("/add-expense", authUser, expensesController.addNewExpense);
 router.delete(
   "/delete-expense/:expenseId",

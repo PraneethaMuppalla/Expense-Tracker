@@ -1,10 +1,14 @@
 const Expense = require("../model/expense");
 const sequelize = require("../util/database");
 
-exports.getAllExpenses = async (req, res, next) => {
+exports.getExpenses = async (req, res, next) => {
   try {
+    const page = +req.query.page;
+    const offSetNow = page * 8;
     const response = await req.user.getExpenses({
       attributes: ["id", "category", "description", "expenses", "date"],
+      offset: offSetNow,
+      limit: 8,
     });
     res.json(response);
   } catch (err) {
