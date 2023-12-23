@@ -93,14 +93,48 @@ async function addExpense(e) {
   }
 }
 
-async function getExpenses(e, page = 1) {
+function showPagination({
+  currentPage,
+  hasNextPage,
+  nextPage,
+  hasPreviousPage,
+  previousPage,
+  lastPage,
+}) {
+  paginationCont.innerHTML = "";
+  if (hasPreviousPage) {
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "<";
+    prevBtn.classList.add("btn", "btn-secondary", "me-2");
+    prevBtn.addEventListener("click", () => getExpenses(previousPage));
+    paginationCont.appendChild(prevBtn);
+  }
+  const currentBtn = document.createElement("button");
+  currentBtn.textContent = currentPage + 1 + " of " + lastPage;
+  currentBtn.classList.add("btn", "btn-secondary", "me-2");
+  currentBtn.addEventListener("click", () => getExpenses(currentPage));
+  paginationCont.appendChild(currentBtn);
+
+  if (hasNextPage) {
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = ">";
+    nextBtn.classList.add("btn", "btn-secondary", "me-2");
+    nextBtn.addEventListener("click", () => getExpenses(nextPage));
+    paginationCont.appendChild(nextBtn);
+  }
+}
+
+async function getExpenses(page) {
   try {
+    tbodyEl.innerHTML = "";
     const result = await axiosInstance.get(
       `/expenses/get-expenses?page=${page}`
     );
-    result.data.forEach((each) => {
-      renderEachExpense(each);
+    const { expenses, ...pagesDes } = result.data;
+    expenses.forEach((expense) => {
+      renderEachExpense(expense);
     });
+    showPagination(pagesDes);
   } catch (err) {
     console.error(err);
     errorToast("Some error occured.We can't fetch expenses. Please try again.");
@@ -154,7 +188,7 @@ async function isPremiumUser() {
 
 buyPremiumBtn.addEventListener("click", purchasePremium);
 formEl.addEventListener("submit", addExpense);
-window.addEventListener("DOMContentLoaded", getExpenses);
+window.addEventListener("DOMContentLoaded", () => getExpenses(0));
 window.addEventListener("DOMContentLoaded", isPremiumUser);
 
 // <<--------------------- code to get toast messages ------------------------>>>>

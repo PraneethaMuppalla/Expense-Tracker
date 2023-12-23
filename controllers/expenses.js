@@ -4,13 +4,26 @@ const sequelize = require("../util/database");
 exports.getExpenses = async (req, res, next) => {
   try {
     const page = +req.query.page;
-    const offSetNow = page * 8;
+    const offSetNow = page * 5;
+    const totalCount = await Expense.count({
+      where: {
+        userId: req.user.id,
+      },
+    });
     const response = await req.user.getExpenses({
       attributes: ["id", "category", "description", "expenses", "date"],
       offset: offSetNow,
-      limit: 8,
+      limit: 5,
     });
-    res.json(response);
+    res.json({
+      expenses: response,
+      currentPage: page,
+      hasNextPage: offSetNow + 5 < totalCount,
+      nextPage: page + 1,
+      hasPreviousPage: page > 0,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalCount / 5),
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, msg: err });
