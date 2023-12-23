@@ -1,7 +1,10 @@
 const path = require("path");
+const fs = require("fs");
 
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
 const dotenv = require("dotenv");
 
 const sequelise = require("./util/database");
@@ -18,12 +21,20 @@ const Order = require("./model/order");
 const ForgotPw = require("./model/forgotPw");
 const FilesDownloaded = require("./model/downloadedFiles");
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+
 // express instance
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: "true" }));
 app.use(cors());
+app.use(helmet());
+app.use(morgan("combined", { stream: accessLogStream }));
 dotenv.config();
+
 // middle ware
 app.use(userRoutes);
 app.use("/expenses", expenseRoutes);
@@ -47,7 +58,7 @@ FilesDownloaded.belongsTo(User);
 sequelise
   .sync()
   .then(() => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch((error) => {
     console.error(error);
