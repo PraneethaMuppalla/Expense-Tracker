@@ -42,6 +42,10 @@ app.use("/premium", premiumRoutes);
 app.use("/password", forgotPwRoutes);
 app.use(reportsRoutes);
 
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "public/views/login.html"));
+});
+
 User.hasMany(Expenses, { constraints: true, onDelete: "CASCADE" });
 Expenses.belongsTo(User);
 
