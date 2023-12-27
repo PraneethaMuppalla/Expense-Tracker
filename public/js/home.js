@@ -201,17 +201,17 @@ window.addEventListener("DOMContentLoaded", () => getExpenses(0, numOfRows));
 window.addEventListener("DOMContentLoaded", isPremiumUser);
 
 // <<--------------------- code to get toast messages ------------------------>>>>
-const urlParams = new URLSearchParams(window.location.search);
-console.log("urlParams" + urlParams);
-const successParam = urlParams.get("success");
-const errorParam = urlParams.get("error");
-if (successParam && successParam === "1") {
-  successToast("Login Successful.", 2000);
-  const newUrl = window.location.href.split("?")[0];
-  history.replaceState(null, "", newUrl);
-}
-if (errorParam && errorParam === "1") {
-  errorToast("You are already registered. Please log in.");
-  const newUrl = window.location.href.split("?")[0];
-  history.replaceState(null, "", newUrl);
-}
+// const urlParams = new URLSearchParams(window.location.search);
+// console.log("urlParams" + urlParams);
+// const successParam = urlParams.get("success");
+// const errorParam = urlParams.get("error");
+// if (successParam && successParam === "1") {
+//   successToast("Login Successful.", 2000);
+//   const newUrl = window.location.href.split("?")[0];
+//   history.replaceState(null, "", newUrl);
+// }
+// if (errorParam && errorParam === "1") {
+//   errorToast("You are already registered. Please log in.");
+//   const newUrl = window.location.href.split("?")[0];
+//   history.replaceState(null, "", newUrl);
+// }

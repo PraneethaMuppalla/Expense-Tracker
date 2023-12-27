@@ -45,6 +45,8 @@ app.use("/password", forgotPwRoutes);
 app.use(reportsRoutes);
 
 app.use((req, res) => {
+  console.log("hit");
+
   res.sendFile(path.join(rootDir, "public", "views", `${req.url}`));
 });
 
