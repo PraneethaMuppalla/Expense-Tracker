@@ -3,14 +3,9 @@ const { Sequelize } = require("sequelize");
 //sequelise --> promise base orm tool
 
 //sequelize instance
-const db = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    dialect: "mysql",
-    host: process.env.DB_HOST,
-  }
-);
+const db = new Sequelize("expense-tracker", "root", "1234", {
+  dialect: "mysql",
+  host: "localhost",
+});
 
 module.exports = db;

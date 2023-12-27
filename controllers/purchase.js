@@ -3,35 +3,35 @@ const Order = require("../model/order");
 const User = require("../model/user");
 const userController = require("./user");
 
-exports.purchasePremium = async (req, res) => {
-  try {
-    const rzp = new Razorpay({
-      key_id: process.env.KEY_ID,
-      key_secret: process.env.KEY_SECRET,
-    });
-    const amount = 5050;
-    rzp.orders.create({ amount, currency: "INR" }, (err, order) => {
-      if (err) {
-        throw new Error(JSON.stringify(err));
-      }
-      req.user
-        .createOrder({ orderid: order.id, status: "PENDING" })
-        .then(() => {
-          return res.status(201).json({ order, key_id: rzp.key_id });
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(403).json({
-      success: false,
-      msg: "Something went wrong",
-      error: err,
-    });
-  }
-};
+// exports.purchasePremium = async (req, res) => {
+//   try {
+//     const rzp = new Razorpay({
+//       key_id: process.env.KEY_ID,
+//       key_secret: process.env.KEY_SECRET,
+//     });
+//     const amount = 5050;
+//     rzp.orders.create({ amount, currency: "INR" }, (err, order) => {
+//       if (err) {
+//         throw new Error(JSON.stringify(err));
+//       }
+//       req.user
+//         .createOrder({ orderid: order.id, status: "PENDING" })
+//         .then(() => {
+//           return res.status(201).json({ order, key_id: rzp.key_id });
+//         })
+//         .catch((err) => {
+//           throw new Error(err);
+//         });
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(403).json({
+//       success: false,
+//       msg: "Something went wrong",
+//       error: err,
+//     });
+//   }
+// };
 
 exports.updateTransactionStatus = async (req, res, next) => {
   let order;

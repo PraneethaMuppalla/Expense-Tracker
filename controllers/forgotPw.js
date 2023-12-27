@@ -6,47 +6,47 @@ const rootDir = require("../util/path");
 const User = require("../model/user");
 const ForgotPw = require("../model/forgotPw");
 
-exports.forgotPassword = async (req, res, next) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ where: { email, email } });
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, msg: "User doesn't exist with this email" });
-    }
-    const uuidId = uuidv4();
-    const passWordreq = await user.createForgotPw({
-      id: uuidId,
-      isActive: true,
-    });
-    const client = Sib.ApiClient.instance;
-    const apiKey = client.authentications["api-key"];
-    apiKey.apiKey = process.env.SIB_KEY;
-    const transEmailApi = new Sib.TransactionalEmailsApi();
-    const sender = {
-      email: "lakshmimuppalla2453@gmail.com",
-      name: "Praneetha",
-    };
-    const receivers = [
-      {
-        email: email,
-      },
-    ];
-    const emailResponse = await transEmailApi.sendTransacEmail({
-      sender,
-      To: receivers,
-      subject: "Expense Tracker Reset Password",
-      textContent: "Link Below",
-      htmlContent: `<h3>Forgot Password</h3><a href="http://localhost:3000/password/resetpassword/${uuidId}">Click here</a>`,
-    });
-    console.log(emailResponse);
-    res.send({});
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, msg: err });
-  }
-};
+// exports.forgotPassword = async (req, res, next) => {
+//   try {
+//     const { email } = req.body;
+//     const user = await User.findOne({ where: { email, email } });
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ success: false, msg: "User doesn't exist with this email" });
+//     }
+//     const uuidId = uuidv4();
+//     const passWordreq = await user.createForgotPw({
+//       id: uuidId,
+//       isActive: true,
+//     });
+//     const client = Sib.ApiClient.instance;
+//     const apiKey = client.authentications["api-key"];
+//     apiKey.apiKey = process.env.SIB_KEY;
+//     const transEmailApi = new Sib.TransactionalEmailsApi();
+//     const sender = {
+//       email: "lakshmimuppalla2453@gmail.com",
+//       name: "Praneetha",
+//     };
+//     const receivers = [
+//       {
+//         email: email,
+//       },
+//     ];
+//     const emailResponse = await transEmailApi.sendTransacEmail({
+//       sender,
+//       To: receivers,
+//       subject: "Expense Tracker Reset Password",
+//       textContent: "Link Below",
+//       htmlContent: `<h3>Forgot Password</h3><a href="http://localhost:3000/password/resetpassword/${uuidId}">Click here</a>`,
+//     });
+//     console.log(emailResponse);
+//     res.send({});
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ success: false, msg: err });
+//   }
+// };
 
 exports.resetPassword = async (req, res, next) => {
   try {
