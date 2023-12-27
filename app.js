@@ -6,7 +6,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-
+dotenv.config();
 const sequelise = require("./util/database");
 const userRoutes = require("./routes/user");
 const expenseRoutes = require("./routes/expense");
@@ -33,7 +33,6 @@ app.use(express.urlencoded({ extended: "true" }));
 app.use(cors());
 app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
-dotenv.config();
 
 // middle ware
 app.use(userRoutes);
