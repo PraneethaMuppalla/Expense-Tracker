@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const express = require("express");
 const cors = require("cors");
-const helmet = require("helmet");
+//const helmet = require("helmet");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: "true" }));
 app.use(cors());
-app.use(helmet());
+//app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 
 // middle ware
