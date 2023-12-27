@@ -1,6 +1,6 @@
 const token = localStorage.getItem("token");
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://16.171.239.191:3000/",
   timeout: 3000,
   headers: { Authorization: token },
 });
