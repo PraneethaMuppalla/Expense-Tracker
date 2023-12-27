@@ -3,7 +3,7 @@ const router = express.Router();
 
 const forgotPwController = require("../controllers/forgotPw");
 
-router.post("/forgotpassword", forgotPwController.forgotPassword);
+//router.post("/forgotpassword", forgotPwController.forgotPassword);
 router.get("/resetpassword/:uuidId", forgotPwController.resetPassword);
 router.post("/updatePassword", forgotPwController.updatePassword);
 

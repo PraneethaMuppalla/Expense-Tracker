@@ -6,7 +6,7 @@ const authUser = require("../middleware/auth");
 
 const router = express.Router();
 
-router.get("/premiumMembership", authUser, purchaseControllers.purchasePremium);
+//router.get("/premiumMembership", authUser, purchaseControllers.purchasePremium);
 
 router.post(
   "/updateTransactionStatus",
