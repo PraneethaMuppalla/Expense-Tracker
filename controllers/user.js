@@ -31,7 +31,7 @@ exports.postNewUser = async (req, res, next) => {
 exports.generateToken = function (userId, userEmail) {
   token = jwt.sign(
     { id: userId, email: userEmail },
-    process.env.SECRET_KEY_JWT
+    "secret_key_for_expense_tracker"
   );
   return token;
 };
