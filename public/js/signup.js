@@ -19,10 +19,10 @@ async function submitSignUpForm(e) {
     nameEl.value = "";
     emailEl.value = "";
     passwordEl.value = "";
-    window.location.href = `./login.html`;
+    window.location.href = `/login.html`;
   } catch (err) {
     if (err.response && err.response.status === 409) {
-      window.location.href = `./login.html`;
+      window.location.href = `/login.html`;
       nameEl.value = "";
       emailEl.value = "";
       passwordEl.value = "";

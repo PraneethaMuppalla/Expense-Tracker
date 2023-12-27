@@ -17,10 +17,10 @@ async function submitLoginForm(e) {
     loginEmailEl.value = "";
     loginPasswordEl.value = "";
     localStorage.setItem("token", response.data.token);
-    window.location.href = "./home.html";
+    window.location.href = "/home.html";
   } catch (err) {
     if (err.response && err.response.status === 404) {
-      window.location.href = "./signup.html";
+      window.location.href = "/signup.html";
     } else if (err.response && err.response.status === 401) {
       errorToast("Password is incorrect.");
     } else {
