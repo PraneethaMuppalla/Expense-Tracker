@@ -58,7 +58,7 @@ exports.uploadToS3 = (stringifiedResponse, fileName) => {
     s3Bucket.upload(params, (err, response) => {
       if (err) {
         console.log(err);
-        reject(err);
+        rej(err);
       } else {
         console.log(response);
         res(response.Location);
