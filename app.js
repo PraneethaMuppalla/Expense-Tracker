@@ -32,7 +32,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: "true" }));
-app.use(cors());
+//app.use(cors());
 //app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 
@@ -46,7 +46,6 @@ app.use(reportsRoutes);
 
 app.use((req, res) => {
   console.log("hit");
-
   res.sendFile(path.join(rootDir, "public", "views", `${req.url}`));
 });
 
