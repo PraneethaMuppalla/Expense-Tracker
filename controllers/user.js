@@ -3,9 +3,24 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../model/user");
 
+function checkStringInvalid(string) {
+  if (!string || string.length === 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 exports.postNewUser = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
+    if (
+      checkStringInvalid(name) ||
+      checkStringInvalid(email) ||
+      checkStringInvalid(password)
+    ) {
+      return res.status(400).json({ err: "Bad parameters" });
+    }
     const users = await User.findAll({
       where: {
         email: email,
@@ -48,6 +63,9 @@ exports.isPremiumUser = (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    if (checkStringInvalid(email) || checkStringInvalid(password)) {
+      return res.status(400).json({ err: "Bad parameters" });
+    }
     const users = await User.findAll({ where: { email: email } });
     const user = users[0];
     if (!user) {
@@ -55,8 +73,8 @@ exports.loginUser = async (req, res, next) => {
       res.status(404).json({ msg: "User not found" });
     } else {
       const passwordsMatch = await bcrypt.compare(password, user.password);
-      const token = this.generateToken(user.id, user.email);
       if (passwordsMatch) {
+        const token = this.generateToken(user.id, user.email);
         res.status(200).json({
           success: true,
           msg: "Successful Login",
@@ -64,7 +82,9 @@ exports.loginUser = async (req, res, next) => {
         });
       } else {
         //unauthorized
-        res.status(401).json({ success: false, msg: "Password doesn't match" });
+        res
+          .status(401)
+          .json({ success: false, msg: "User or password is incorrect" });
       }
     }
   } catch (err) {

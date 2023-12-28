@@ -9,7 +9,7 @@ const ForgotPw = require("../model/forgotPw");
 exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ where: { email, email } });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res
         .status(404)
@@ -25,6 +25,7 @@ exports.forgotPassword = async (req, res, next) => {
     apiKey.apiKey = process.env.SIB_KEY;
     const transEmailApi = new Sib.TransactionalEmailsApi();
     const sender = {
+      //email used for registering the account
       email: "lakshmimuppalla2453@gmail.com",
       name: "Praneetha",
     };
@@ -37,10 +38,9 @@ exports.forgotPassword = async (req, res, next) => {
       sender,
       To: receivers,
       subject: "Expense Tracker Reset Password",
-      textContent: "Link Below",
       htmlContent: `<h3>Forgot Password</h3><a href="http://localhost:3000/password/resetpassword/${uuidId}">Click here</a>`,
     });
-    console.log(emailResponse);
+    console.log("respnose ====>>>>>>" + JSON.stringify(emailResponse));
     res.send({});
   } catch (err) {
     console.error(err);
@@ -52,7 +52,7 @@ exports.resetPassword = async (req, res, next) => {
   try {
     const uuid = req.params.uuidId;
     const obj = await ForgotPw.findByPk(uuid);
-    console.log("object" + obj + "isActive" + obj.isActive);
+    // console.log("object" + obj + "isActive" + obj.isActive);
     if (obj && obj.isActive) {
       return res.send(`<form action="/password/updatePassword" method="POST">
       
@@ -66,7 +66,7 @@ exports.resetPassword = async (req, res, next) => {
       <button type="submit" >Ok</button>
       </form>`);
     }
-    return res.send(`<h1>An error occured</h1>`);
+    return res.send(`<h1>This link has expired</h1>`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, msg: err });

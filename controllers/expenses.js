@@ -5,7 +5,7 @@ exports.getExpenses = async (req, res, next) => {
   try {
     const page = +req.query.page || 0;
     const rows = +req.query.rows || 5;
-    const offSetNow = page * 5;
+    const offSetNow = page * rows;
     const totalCount = await Expense.count({
       where: {
         userId: req.user.id,
@@ -50,9 +50,6 @@ exports.addNewExpense = async (req, res, next) => {
       },
       { transaction: t }
     );
-
-    // //independent promises ==>>> optimisation
-    // const response = await Promise.all([promise1, promise2]);
     // If the execution reaches this line, no errors were thrown.
     // We commit the transaction.
     await t.commit();
@@ -93,13 +90,14 @@ exports.deleteExpense = async (req, res, next) => {
 
     await t.commit();
     if (response > 0) {
-      res.json({ success: true, msg: "Expense deleted successfully" });
+      res.status(204).json({ success: true });
     } else {
       res.status(404).json({ success: false, msg: "Expense not found" });
     }
   } catch (err) {
     await t.rollback();
     console.error(err);
-    res.status(500).json({ success: false, msg: err });
+    console.log("hit");
+    res.status(500).json({ success: false, msg: JSON.stringify(err) });
   }
 };

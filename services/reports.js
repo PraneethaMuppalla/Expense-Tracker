@@ -38,7 +38,9 @@ exports.getTimelyExpense = async (userId, type) => {
       });
       break;
     default:
-      response = await Expenses.findAll({ where: { userId } });
+      response = await Expenses.findAll({
+        where: { userId, date: new Date() },
+      });
   }
   return response;
 };

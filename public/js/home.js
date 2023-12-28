@@ -1,7 +1,7 @@
 const token = localStorage.getItem("token");
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000",
-  timeout: 3000,
+  timeout: 5000,
   headers: { Authorization: token },
 });
 
@@ -85,7 +85,7 @@ async function addExpense(e) {
       "/expenses/add-expense",
       newExpense
     );
-    renderEachExpense(response.data);
+    getExpenses(0, numOfRows);
     amountEl.value = "";
     categoryEl.value = "";
     descriptionEl.value = "";
@@ -113,6 +113,9 @@ function showPagination({
     paginationCont.appendChild(prevBtn);
   }
   const currentBtn = document.createElement("button");
+  if (lastPage === 0) {
+    lastPage = 1;
+  }
   currentBtn.textContent = currentPage + 1 + " of " + lastPage;
   currentBtn.classList.add("btn", "btn-secondary", "me-2");
   currentBtn.addEventListener("click", () =>
@@ -151,12 +154,14 @@ async function purchasePremium(e) {
     const response = await axiosInstance.get("/purchase/premiumMembership");
     const options = {
       key: response.data.key_id,
-      order_id: response.data.order.id,
+      name: "Expense Tracker",
+      description: "Be a premium user",
+      order_id: response.data.orderId,
       handler: async function (response) {
         const res = await axiosInstance.post(
           "/purchase/updateTransactionStatus",
           {
-            order_id: options.order_id,
+            order_id: response.razorpay_order_id,
             payment_id: response.razorpay_payment_id,
           }
         );
@@ -165,8 +170,14 @@ async function purchasePremium(e) {
 
         isPremiumUser();
       },
+      theme: {
+        color: "#99cc33",
+      },
     };
     const rzp1 = new Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(response.error.description);
+    });
     rzp1.open();
     e.preventDefault();
   } catch (err) {

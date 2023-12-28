@@ -17,7 +17,9 @@ exports.purchasePremium = async (req, res) => {
       req.user
         .createOrder({ orderid: order.id, status: "PENDING" })
         .then(() => {
-          return res.status(201).json({ order, key_id: rzp.key_id });
+          return res
+            .status(202)
+            .json({ orderId: order.id, key_id: rzp.key_id });
         })
         .catch((err) => {
           throw new Error(err);
@@ -25,7 +27,7 @@ exports.purchasePremium = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(403).json({
+    res.status(500).json({
       success: false,
       msg: "Something went wrong",
       error: err,
@@ -50,7 +52,7 @@ exports.updateTransactionStatus = async (req, res, next) => {
     });
     const promise2 = req.user.update({ isPremiumUser: true });
     const successOrder = await Promise.all([promise1, promise2]);
-    return res.status(202).json({
+    return res.status(201).json({
       success: true,
       message: "Transaction Successful",
     });
