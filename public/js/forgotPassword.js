@@ -1,5 +1,5 @@
 const axiosInstance = axios.create({
-  baseURL: "http://16.171.239.191:3000/",
+  baseURL: "http://13.201.116.84:3000/",
 });
 const formEl = document.getElementById("form");
 const emailEl = document.getElementById("email");

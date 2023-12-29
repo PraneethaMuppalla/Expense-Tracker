@@ -38,7 +38,7 @@ exports.forgotPassword = async (req, res, next) => {
       To: receivers,
       subject: "Expense Tracker Reset Password",
       textContent: "Link Below",
-      htmlContent: `<h3>Forgot Password</h3><a href="http://localhost:3000/password/resetpassword/${uuidId}">Click here</a>`,
+      htmlContent: `<h3>Forgot Password</h3><a href="http://13.201.116.84:3000/password/resetpassword/${uuidId}">Click here</a>`,
     });
     console.log(emailResponse);
     res.send({});
