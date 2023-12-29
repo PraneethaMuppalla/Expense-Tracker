@@ -14,6 +14,7 @@ const purchaseRoutes = require("./routes/purchase");
 const premiumRoutes = require("./routes/premium");
 const forgotPwRoutes = require("./routes/forgotPw");
 const reportsRoutes = require("./routes/reports");
+const rootDir = require("./util/path");
 
 const User = require("./model/user");
 const Expenses = require("./model/expense");
@@ -28,13 +29,15 @@ const accessLogStream = fs.createWriteStream(
 
 // express instance
 const app = express();
+// middle ware
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: "true" }));
 app.use(cors());
 app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 
-// middle ware
+//routes
 app.use(userRoutes);
 app.use("/expenses", expenseRoutes);
 app.use("/purchase", purchaseRoutes);
@@ -43,7 +46,8 @@ app.use("/password", forgotPwRoutes);
 app.use(reportsRoutes);
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "public/views/login.html"));
+  console.log("hit");
+  res.sendFile(path.join(rootDir, "public", "views", `${req.url}`));
 });
 
 User.hasMany(Expenses, { constraints: true, onDelete: "CASCADE" });

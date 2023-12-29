@@ -16,7 +16,7 @@ exports.getExpenses = async (req, res, next) => {
       offset: offSetNow,
       limit: rows,
     });
-    res.json({
+    res.status(200).json({
       expenses: response,
       currentPage: page,
       hasNextPage: offSetNow + rows < totalCount,

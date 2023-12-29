@@ -54,7 +54,7 @@ exports.generateToken = function (userId, userEmail) {
 exports.isPremiumUser = (req, res, next) => {
   try {
     const isPremiumUser = req.user.isPremiumUser;
-    res.json({ isPremiumUser });
+    res.status(200).json({ isPremiumUser });
   } catch (err) {
     res.status(500).json({ success: false, err: err });
   }
