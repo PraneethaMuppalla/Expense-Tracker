@@ -1,21 +1,16 @@
 const Expense = require("../model/expense");
-const sequelize = require("../util/database");
+const User = require("../model/user");
+const mongoose = require("mongoose");
 
 exports.getExpenses = async (req, res, next) => {
   try {
     const page = +req.query.page || 0;
     const rows = +req.query.rows || 5;
     const offSetNow = page * rows;
-    const totalCount = await Expense.count({
-      where: {
-        userId: req.user.id,
-      },
-    });
-    const response = await req.user.getExpenses({
-      attributes: ["id", "category", "description", "expenses", "date"],
-      offset: offSetNow,
-      limit: rows,
-    });
+    const totalCount = await Expense.countDocuments({ userId: req.user.id });
+    const response = await Expense.find({ userId: req.user._id })
+      .skip(offSetNow)
+      .limit(rows);
     res.status(200).json({
       expenses: response,
       currentPage: page,
@@ -32,70 +27,52 @@ exports.getExpenses = async (req, res, next) => {
 };
 
 exports.addNewExpense = async (req, res, next) => {
-  const t = await sequelize.transaction();
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const { expenses, category, description } = req.body;
-    const { totalExpenses } = req.user;
-    const promise1 = await req.user.createExpense(
-      {
-        expenses,
-        category,
-        description,
-      },
-      { transaction: t }
-    );
-    const promise2 = await req.user.update(
-      {
-        totalExpenses: totalExpenses + +expenses,
-      },
-      { transaction: t }
-    );
-    // If the execution reaches this line, no errors were thrown.
-    // We commit the transaction.
-    await t.commit();
-    res.status(201).json(promise1);
+    const newExpense = new Expense({
+      expenses,
+      category,
+      description,
+      userId: req.user,
+    });
+    const result = await newExpense.save({ session });
+    const user = await User.findById(req.user.id);
+    user.totalExpenses += Number(expenses);
+    await user.save({ session });
+    await session.commitTransaction();
+
+    res.status(201).json(result);
   } catch (err) {
     // If the execution reaches this line, an error was thrown.
     // We rollback the transaction.
-    await t.rollback();
+    await session.abortTransaction();
     console.error(err);
     res.status(500).json({ success: false, msg: err });
   }
 };
 exports.deleteExpense = async (req, res, next) => {
-  const t = await sequelize.transaction();
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
-    const expenseid = +req.params.expenseId;
-    const { totalExpenses } = req.user;
-    const expesneRows = await req.user.getExpenses({
-      where: { id: expenseid },
-    });
-    const expense = expesneRows[0];
-
-    const response2 = await req.user.update(
-      {
-        totalExpenses: totalExpenses - expense.expenses,
-      },
-      { transaction: t }
+    console.log("object");
+    const expenseid = req.params.expenseId;
+    const expense = await Expense.findById({ _id: expenseid });
+    const user = await User.findById(req.user.id);
+    user.totalExpenses -= Number(expense.expenses);
+    await user.save({ session });
+    const response = await Expense.findByIdAndDelete(expenseid).session(
+      session
     );
-    const response = await Expense.destroy(
-      {
-        where: {
-          id: expenseid,
-          userId: req.user.id,
-        },
-      },
-      { transaction: t }
-    );
-
-    await t.commit();
-    if (response > 0) {
+    await session.commitTransaction();
+    if (response) {
       res.status(204).json({ success: true });
     } else {
       res.status(404).json({ success: false, msg: "Expense not found" });
     }
   } catch (err) {
-    await t.rollback();
+    await session.abortTransaction();
     console.error(err);
     console.log("hit");
     res.status(500).json({ success: false, msg: JSON.stringify(err) });

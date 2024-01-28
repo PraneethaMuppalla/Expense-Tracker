@@ -32,7 +32,7 @@ async function deleteExpense(id) {
 
 function renderEachExpense(each) {
   let tr = document.createElement("tr");
-  tr.id = `rowEl${each.id}`;
+  tr.id = `rowEl${each._id}`;
   let td1 = document.createElement("td");
   const dateFromBe = new Date(each.date);
   td1.textContent = `${dateFromBe.getFullYear()}-${
@@ -54,7 +54,7 @@ function renderEachExpense(each) {
   deleteBtn.textContent = "Delete";
 
   deleteBtn.onclick = function () {
-    deleteExpense(each.id);
+    deleteExpense(each._id);
   };
 
   // let editBtn = document.createElement("button");

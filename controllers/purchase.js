@@ -14,8 +14,13 @@ exports.purchasePremium = async (req, res) => {
       if (err) {
         throw new Error(JSON.stringify(err));
       }
-      req.user
-        .createOrder({ orderid: order.id, status: "PENDING" })
+      const newOrder = new Order({
+        orderid: order.id,
+        status: "PENDING",
+        userId: req.user,
+      });
+      newOrder
+        .save()
         .then(() => {
           return res
             .status(202)

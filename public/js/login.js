@@ -18,6 +18,7 @@ async function submitLoginForm(e) {
     loginPasswordEl.value = "";
     localStorage.setItem("token", response.data.token);
     window.location.href = "./home.html?success=1";
+    alert("Login successful");
   } catch (err) {
     if (err.response && err.response.status === 404) {
       window.location.href = "./signup.html?error=1";

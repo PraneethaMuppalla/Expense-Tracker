@@ -21,18 +21,20 @@ exports.postNewUser = async (req, res, next) => {
     ) {
       return res.status(400).json({ err: "Bad parameters" });
     }
-    const users = await User.findAll({
-      where: {
-        email: email,
-      },
+    const user = await User.findOne({
+      email,
     });
-    const user = users[0];
     if (user) {
       //user already exists
       res.status(409).json({ success: false, error: "User already exists." });
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
-      await User.create({ name, email, password: hashedPassword });
+      const newUser = new User({
+        name,
+        email,
+        password: hashedPassword,
+      });
+      await newUser.save();
       res
         .status(201)
         .json({ success: true, msg: "User registration successful." });
@@ -66,15 +68,15 @@ exports.loginUser = async (req, res, next) => {
     if (checkStringInvalid(email) || checkStringInvalid(password)) {
       return res.status(400).json({ err: "Bad parameters" });
     }
-    const users = await User.findAll({ where: { email: email } });
-    const user = users[0];
+    const user = await User.findOne({ email });
     if (!user) {
       //not found
       res.status(404).json({ msg: "User not found" });
     } else {
       const passwordsMatch = await bcrypt.compare(password, user.password);
       if (passwordsMatch) {
-        const token = this.generateToken(user.id, user.email);
+        const token = this.generateToken(user._id, user.email);
+        console.log(user._id);
         res.status(200).json({
           success: true,
           msg: "Successful Login",
