@@ -1,4 +1,4 @@
-const Expenses = require("../model/expense");
+const Expenses = require("../models/expense");
 const { Op } = require("sequelize");
 const AWS = require("aws-sdk");
 

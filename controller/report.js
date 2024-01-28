@@ -1,5 +1,5 @@
 const ReportServices = require("../services/reports");
-const Expenses = require("../models/expense");
+const Expenses = require("../model/expense");
 
 exports.getTimelyExpenses = async (req, res, next) => {
   try {

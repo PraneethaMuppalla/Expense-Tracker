@@ -3,8 +3,8 @@ const Sib = require("sib-api-v3-sdk");
 const { v4: uuidv4 } = require("uuid");
 
 const rootDir = require("../util/path");
-const User = require("../models/user");
-const ResetPassword = require("../models/reset-password");
+const User = require("../model/user");
+const ResetPassword = require("../model/reset-password");
 
 exports.forgotPassword = async (req, res, next) => {
   try {
