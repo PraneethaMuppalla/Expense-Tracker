@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 const tbodyEl = document.getElementById("tbody");
 function renderEachExpense(each, i) {
   let tr = document.createElement("tr");
-  tr.id = `rowEl${each.id}`;
+  tr.id = `rowEl${each._id}`;
   let td1 = document.createElement("td");
   td1.textContent = i + 1;
 
@@ -19,8 +19,8 @@ function renderEachExpense(each, i) {
   td3.textContent = each.name;
 
   tr.appendChild(td1);
-  tr.appendChild(td2);
   tr.appendChild(td3);
+  tr.appendChild(td2);
   tbodyEl.appendChild(tr);
 }
 

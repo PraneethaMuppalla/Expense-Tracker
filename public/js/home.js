@@ -193,7 +193,7 @@ async function isPremiumUser() {
       buyPremiumBtn.innerHTML = "Premium Member ";
       buyPremiumBtn.removeEventListener("click", purchasePremium);
       leaderBoardLink.removeAttribute("click");
-      leaderBoardLink.href = "./leaderBoard.html";
+      leaderBoardLink.href = "./leader-board.html";
       reportLink.removeAttribute("click");
       reportLink.href = "./report.html";
     }

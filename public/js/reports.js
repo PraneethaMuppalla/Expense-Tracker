@@ -5,14 +5,15 @@ const axiosInstance = axios.create({
   headers: { Authorization: token },
 });
 
-const expnsesEl = document.getElementById("expenses");
+//const expnsesEl = document.getElementById("expenses");
 const tbodyEl = document.getElementById("tbody");
 
 function renderEachExpense(each) {
   let tr = document.createElement("tr");
   tr.id = `rowEl${each.id}`;
-  let td1 = document.createElement("td");
-  td1.textContent = each.date;
+  // let newdate = `${each.date.getDate()}`;
+  // let td1 = document.createElement("td");
+  // td1.textContent = newdate;
 
   let td2 = document.createElement("td");
   td2.textContent = each.category;
@@ -29,7 +30,7 @@ function renderEachExpense(each) {
 
   //td4.appendChild(editBtn);
 
-  tr.appendChild(td1);
+  //tr.appendChild(td1);
   tr.appendChild(td2);
   tr.appendChild(td3);
   tr.appendChild(td4);
@@ -39,10 +40,10 @@ function renderEachExpense(each) {
 
 async function getTimelyExpenses() {
   try {
-    const option = expnsesEl.value;
-    console.log(option);
+    //const option = expnsesEl.value;
+    //console.log(option);
     tbodyEl.innerHTML = "";
-    const response = await axiosInstance.get(`/reports?type=${option}`);
+    const response = await axiosInstance.get(`/reports`);
     console.log(response.data);
     response.data.forEach((each) => {
       renderEachExpense(each);
@@ -66,5 +67,5 @@ async function downloadReport() {
   }
 }
 
-expnsesEl.addEventListener("change", getTimelyExpenses);
+//expnsesEl.addEventListener("change", getTimelyExpenses);
 document.addEventListener("DOMContentLoaded", getTimelyExpenses);

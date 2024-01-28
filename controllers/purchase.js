@@ -15,7 +15,7 @@ exports.purchasePremium = async (req, res) => {
         throw new Error(JSON.stringify(err));
       }
       const newOrder = new Order({
-        orderid: order.id,
+        orderId: order.id,
         status: "PENDING",
         userId: req.user,
       });
@@ -46,16 +46,15 @@ exports.updateTransactionStatus = async (req, res, next) => {
     const { payment_id, order_id } = req.body;
     const userId = req.user.id;
     const order = await Order.findOne({
-      where: {
-        userId: userId,
-        orderid: order_id,
-      },
+      userId: userId,
+      orderId: order_id,
     });
-    const promise1 = order.update({
-      paymentid: payment_id,
-      status: "SUCCESSFUL",
-    });
-    const promise2 = req.user.update({ isPremiumUser: true });
+
+    order.paymentId = payment_id;
+    order.status = "SUCCESSFUL";
+    const promise1 = order.save();
+    req.user.isPremiumUser = true;
+    const promise2 = req.user.save();
     const successOrder = await Promise.all([promise1, promise2]);
     return res.status(201).json({
       success: true,

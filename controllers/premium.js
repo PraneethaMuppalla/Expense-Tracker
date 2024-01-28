@@ -20,10 +20,7 @@ exports.getLeaderBoard = async (req, res, next) => {
     //   group: [`userId`],
     //   order: [[Sequelize.col("totalExpenses"), "DESC"]],
     // });
-    const response = await User.findAll({
-      order: [["totalExpenses", "DESC"]],
-    });
-    console.log(response);
+    const response = await User.find().sort({ totalExpenses: -1 });
     res.json(response);
   } catch (err) {
     console.error(err);

@@ -12,8 +12,8 @@ const userRoutes = require("./routes/user");
 const expenseRoutes = require("./routes/expense");
 const purchaseRoutes = require("./routes/purchase");
 const premiumRoutes = require("./routes/premium");
-const forgotPwRoutes = require("./routes/forgotPw");
-const reportsRoutes = require("./routes/reports");
+const resetPasswordRoutes = require("./routes/reset-password");
+const reportsRoutes = require("./routes/report");
 
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "access.log"),
@@ -35,13 +35,8 @@ app.use(userRoutes);
 app.use("/expenses", expenseRoutes);
 app.use("/purchase", purchaseRoutes);
 app.use("/premium", premiumRoutes);
-app.use("/password", forgotPwRoutes);
+app.use("/password", resetPasswordRoutes);
 app.use(reportsRoutes);
-
-app.use((req, res) => {
-  console.log("hit");
-  res.sendFile(path.join(rootDir, "public", "views", `${req.url}`));
-});
 
 mongoose
   .connect(process.env.MONGO_DRIVER)

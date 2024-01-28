@@ -4,22 +4,24 @@ const { v4: uuidv4 } = require("uuid");
 
 const rootDir = require("../util/path");
 const User = require("../model/user");
-const ForgotPw = require("../model/forgotPw");
+const ResetPassword = require("../model/reset-password");
 
 exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(404)
         .json({ success: false, msg: "User doesn't exist with this email" });
     }
     const uuidId = uuidv4();
-    const passWordreq = await user.createForgotPw({
+    const resetPasswordReq = new ResetPassword({
       id: uuidId,
       isActive: true,
+      userId: user._id,
     });
+    await resetPasswordReq.save();
     const client = Sib.ApiClient.instance;
     const apiKey = client.authentications["api-key"];
     apiKey.apiKey = process.env.SIB_KEY;
@@ -51,7 +53,7 @@ exports.forgotPassword = async (req, res, next) => {
 exports.resetPassword = async (req, res, next) => {
   try {
     const uuid = req.params.uuidId;
-    const obj = await ForgotPw.findByPk(uuid);
+    const obj = await ResetPassword.findOne({ id: uuid });
     // console.log("object" + obj + "isActive" + obj.isActive);
     if (obj && obj.isActive) {
       return res.send(`<form action="/password/updatePassword" method="POST">
@@ -77,17 +79,14 @@ exports.updatePassword = async (req, res, next) => {
   try {
     const { uuid, password } = req.body;
     const hashedPw = await bcrypt.hash(password, 10);
-    const forgotPasswordRow = await ForgotPw.findByPk(uuid);
+    const forgotPasswordRow = await ResetPassword.findOne({ id: uuid });
     if (forgotPasswordRow && forgotPasswordRow.isActive) {
-      await ForgotPw.update(
-        { isActive: false },
-        { where: { userId: forgotPasswordRow.userId } }
-      );
-      await User.update(
-        { password: hashedPw },
-        { where: { id: forgotPasswordRow.userId } }
-      );
+      forgotPasswordRow.isActive = false;
+      await forgotPasswordRow.save();
+      const user = await User.findOne({ _id: forgotPasswordRow.userId });
+      user.password = hashedPw;
       res.json({ success: true });
+      await user.save();
     } else {
       res.status(409).json({ success: false, msg: "Link already expired" });
     }
